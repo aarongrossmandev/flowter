@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 interface ButtonProps {
   label: string;
@@ -7,10 +8,18 @@ interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
   outline?: boolean;
-  type?: any
+  type?: any;
+  onMouseHovered?: boolean;
+  onMouseOutHover?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, large, onClick, disabled, outline, type }) => {
+const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, large, onClick, disabled, outline, type, onMouseHovered, onMouseOutHover }) => {
+  const [isHoveredLabel, setIsHoveredLabel] = useState(false)
+
+  const hoveredLabel = () => {
+    setIsHoveredLabel(true)
+  }
+
   return (
     <button
       type={type}
@@ -20,8 +29,10 @@ const Button: React.FC<ButtonProps> = ({ label, secondary, fullWidth, large, onC
     ${fullWidth ? 'w-full' : 'w-fit'} 
     ${secondary ? 'bg-white text-black border-black' : 'bg-sky-500 text-white border-sky-500'} 
     ${large ? 'text-xl px-5 py-3' : 'text-md px-4 py-2'} 
-    ${outline ? 'bg-transparent border-white text-white' : ''} `}
+    ${outline ? 'bg-transparent border-white text-white' : ''}
+    `}
     >
+
       {label}
     </button>
   );

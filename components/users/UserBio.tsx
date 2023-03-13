@@ -1,8 +1,9 @@
 import useCurrentUser from "@/hooks/useCurrentUser";
 import UseEditModal from "@/hooks/useEditModal";
+import useFollow from "@/hooks/useFollow";
 import useUser from "@/hooks/useUser";
 import { format } from 'date-fns';
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BiCalendar } from "react-icons/bi";
 import Button from "../Button";
 
@@ -14,7 +15,19 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
   const { data: currentUser } = useCurrentUser();
   const { data: fetchedUser } = useUser(userId);
 
+  const [isHoveredLabel, setIsHoveredLabel] = useState(false)
+
+  const hoveredLabel = () => {
+    setIsHoveredLabel(true)
+  }
+
+  const noHover = () => {
+    setIsHoveredLabel(false)
+  }
+
   const editModal = UseEditModal();
+
+  const { isFollowing, toggleFollow } = useFollow(userId);
 
   const createdAt = useMemo(() => {
     if (!fetchedUser?.createdAt) {
@@ -31,10 +44,19 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
           <Button secondary label="Edit" onClick={editModal.onOpen} />
         ) : (
           <Button
-            onClick={() => { }}
-            label="Follow"
-            secondary
+            onClick={toggleFollow}
+            label={isFollowing ? 'Following' : 'Follow'}
+            secondary={!isFollowing}
+            outline={isFollowing}
           />
+          // <button
+          //   onMouseOver={hoveredLabel}
+          //   onMouseOut={noHover}
+          //   onClick={toggleFollow}
+          //   className="border p-2"
+          // >
+          //   {isFollowing ? ('Following') : isFollowing && isHoveredLabel ? ('Unfollow') : 'Follow'}
+          // </button>
         )}
       </div>
       <div className="mt-8 px-4">
